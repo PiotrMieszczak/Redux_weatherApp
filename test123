@@ -1,0 +1,78 @@
+export class QueryParams {
+  pagination: Pagination = new Pagination();
+  protected sortOrders: SortOrder[];
+  protected criteria: SearchCriteria;
+
+  constructor(criteria: SearchCriteria) {
+    this.criteria = criteria ? criteria : new SearchCriteria();
+  }
+
+  setPagination(offset: number, numberRows: number): void {
+    this.pagination.setOffset(offset);
+    this.pagination.setRowNumbers(numberRows);
+  }
+
+  sortBy(sortOrder: SortOrder[]): void {
+    this.sortOrders = sortOrder;
+  }
+
+  where(column: string, value: any): void {
+    this.criteria.where(column, value);
+  }
+
+  setValue(column: string, value: any): void {
+    this.criteria.setValue(column, value);
+  }
+}
+
+export class SearchCriteria {
+  where(column: string, value: any): void {
+    this[column] = value;
+  }
+
+  setValue(column: string, value: any): void {
+    if (this.hasOwnProperty(column)) {
+      this[column] = value;
+    }
+  }
+}
+
+export class IntermediarySearchCriteria extends SearchCriteria {
+  private salesProfileNumber = null;
+  private intermediaryNumber = null;
+  private branchSymbol = null;
+}
+
+export class Pagination {
+  private offset = 0;
+  private numberRows = 100;
+
+  setOffset(offset: number) {
+    this.offset = offset;
+  }
+
+  getOffset(): number {
+    return this.offset;
+  }
+
+  setRowNumbers(numberRows: number) {
+    this.numberRows = numberRows;
+  }
+}
+
+export class SortOrder {
+  private ordinal: number;
+  private field: string;
+  private direction: SortDirection;
+
+  sortBy(ordinal: number, field: string, direction: SortDirection) {
+    this.ordinal = ordinal;
+    this.field = field;
+    this.direction = direction;
+  }
+}
+
+export enum SortDirection {
+  ASC = 'ASC',
+  DSC = 'DSC'
+}
